@@ -32,6 +32,13 @@ fun AstralEmblem(modifier: Modifier = Modifier, size: Dp = 120.dp, intensity: Fl
     Canvas(modifier.size(size)) { drawAstralEmblem(intensity) }
 }
 
+/** Backwards-compatible component name used by existing screens; now renders Astral's emblem. */
+@Deprecated("Use AstralEmblem")
+@Composable
+fun LightCross(modifier: Modifier = Modifier, size: Dp = 120.dp, intensity: Float = 1f) {
+    AstralEmblem(modifier = modifier, size = size, intensity = intensity)
+}
+
 /** Astral Studio orbital-star symbol in reflective silver with a restrained violet glint. */
 fun DrawScope.drawAstralEmblem(intensity: Float = 1f) {
     val w = size.width
