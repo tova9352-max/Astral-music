@@ -9,13 +9,16 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.sign
 
-/**
- * Black is the room; white is precious. Most type is grey, and only what matters most is full
- * white. Artwork brings the only colour.
- */
+/** Astral's foundation: a black canvas, silver-white highlights and a restrained violet accent. */
 object Ink {
     val Black = Color(0xFF000000)
     val White = Color(0xFFFFFFFF)
+
+    /** Astral brand accents for future Glass surfaces and highlights. */
+    val AstralViolet = Color(0xFF8B72D8)
+    val AstralVioletDeep = Color(0xFF49366F)
+    val AstralSilver = Color(0xFFD8DDE8)
+    val AstralGlow = Color(0x66D9DFFF)
 
     /** Secondary type: artists, details. */
     val Grey = Color(0xFF9A9A9A)
