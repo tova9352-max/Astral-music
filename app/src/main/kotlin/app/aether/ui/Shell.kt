@@ -490,7 +490,7 @@ internal fun DayCapsule(modifier: Modifier = Modifier, backdrop: Backdrop? = Loc
     Row(
         modifier
             .height(32.dp)
-            .semantics { contentDescription = "AETHER. $day" }
+            .semantics { contentDescription = "Astral Music. $day" }
             .liquidGlass(Corners.Pill, GlassWeight.Key, tint = Ash, backdrop = backdrop)
             .padding(start = 5.dp, end = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
