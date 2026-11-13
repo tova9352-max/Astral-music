@@ -64,13 +64,13 @@ fun DrawScope.drawLightCross(intensity: Float = 1f, centre: Offset = center, ext
     drawCircle(Brush.radialGradient(listOf(white.copy(alpha = i), white.copy(alpha = 0f)), centre, s * 0.04f), radius = s * 0.04f, center = centre, blendMode = BlendMode.Plus)
 }
 
-/** Aether, signed in the script, over the cross of light, with the year below. */
+/** Astral, signed in the script, over the cross of light, with the year below. */
 @Composable
-fun Wordmark(modifier: Modifier = Modifier, crossSize: Dp = 132.dp, showYear: Boolean = true, aside: String? = "A Music Sanctuary") {
+fun Wordmark(modifier: Modifier = Modifier, crossSize: Dp = 132.dp, showYear: Boolean = true, aside: String? = "MUSIC") {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         LightCross(size = crossSize)
         Spacer(Modifier.height(20.dp))
-        Txt("Aether", Type.Inscription)
+        Txt("Astral", Type.Inscription)
         if (aside != null) {
             Spacer(Modifier.height(6.dp))
             Txt(aside, Type.Aside, color = Ink.Grey)
