@@ -109,7 +109,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.withTimeoutOrNull
 import app.aether.ui.common.Colophon
 import app.aether.ui.common.DockClearance
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import app.aether.R
 import app.aether.core.designsystem.theme.Motion
@@ -268,7 +267,7 @@ fun HomeScreen() {
         item(key = "phone") { if (filterTitle == null) app.aether.ui.library.OfflineShelves() }
         when (load) {
             Load.Loading -> item(key = "loading") { Loading(Modifier.padding(top = 40.dp)) }
-            is Load.Failed -> item(key = "failed") { Notice(load.title, load.body, action = "Try again", onAction = retry) }
+            is Load.Failed -> item(key = "failed") { Notice(load.title, load.body, action = "Reintentar", onAction = retry) }
             is Load.Ready -> {
                 item(key = "recent") {
                     if (filterTitle == null && recent.isNotEmpty()) SectionBlock(FeedSection("Recently played", recent, strapline = "From your listening", style = SectionStyle.CAROUSEL))
