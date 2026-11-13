@@ -194,8 +194,6 @@ fun HomeScreen() {
     val container = LocalContainer.current
     val actions = LocalActions.current
     val context = LocalContext.current
-    LaunchedEffect(Unit) { HomeWallpaper.load(context) }
-    val wallpaper = HomeWallpaper.uri
     val source = container.sources.primary
     var filterTitle by rememberSaveable { mutableStateOf<String?>(null) }
     var filters by remember { mutableStateOf(container.catalog.peek<List<FeedFilter>>("home:filters").orEmpty()) }
@@ -235,13 +233,6 @@ fun HomeScreen() {
     // A finger anywhere on the page, watched without being taken: the figures wait while one is down.
     var touching by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxSize()) {
-        if (wallpaper != null) {
-            AsyncImage(model = wallpaper, contentDescription = null, contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize().graphicsLayer {
-                    renderEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) BlurEffect(22f, 22f, TileMode.Clamp) else null
-                })
-            Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.70f)))
-        }
         LazyColumn(
         Modifier.fillMaxSize().pointerInput(Unit) {
             awaitPointerEventScope {

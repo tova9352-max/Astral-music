@@ -64,6 +64,7 @@ import app.aether.ui.detail.PlaylistScreen
 import app.aether.ui.detail.SleeveActions
 import app.aether.ui.detail.SleeveHead
 import app.aether.ui.home.HomeScreen
+import app.aether.ui.home.AppWallpaper
 import app.aether.ui.library.HistoryScreen
 import app.aether.ui.library.LibraryScreen
 import app.aether.ui.library.LikedScreen
@@ -270,9 +271,9 @@ private fun Page(
             }
             // Inside the layer: what's measured from here is where things will be once it has arrived.
             .onPlaced { page.frame = it }
-            .then(if (above == null && page.phase != PagePhase.Kept) Modifier else Modifier.clearAndSetSemantics { })
-            .background(Ink.Black),
+            .then(if (above == null && page.phase != PagePhase.Kept) Modifier else Modifier.clearAndSetSemantics { }),
     ) {
+        AppWallpaper(excluded = page.route == Route.Settings)
         CompositionLocalProvider(LocalPage provides page, LocalRoomsHidden provides hidden, LocalPageSettled provides settled) {
             holder.SaveableStateProvider(page.id) { Screen(page.route) }
         }
