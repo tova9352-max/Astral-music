@@ -14,6 +14,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.unit.Dp
@@ -27,10 +28,44 @@ import app.aether.core.designsystem.theme.Type
  * bright core in a soft halo, and faint diagonal glints. Additive, so it only ever adds light.
  */
 @Composable
-fun LightCross(modifier: Modifier = Modifier, size: Dp = 120.dp, intensity: Float = 1f) {
-    Canvas(modifier.size(size)) { drawLightCross(intensity) }
+fun AstralEmblem(modifier: Modifier = Modifier, size: Dp = 120.dp, intensity: Float = 1f) {
+    Canvas(modifier.size(size)) { drawAstralEmblem(intensity) }
 }
 
+/** Astral Studio orbital-star symbol in reflective silver with a restrained violet glint. */
+fun DrawScope.drawAstralEmblem(intensity: Float = 1f) {
+    val w = size.width
+    val h = size.height
+    val i = intensity.coerceIn(0f, 1.5f)
+    val orbit = Path().apply {
+        moveTo(w * 0.06f, h * 0.69f)
+        cubicTo(w * 0.20f, h * 0.43f, w * 0.63f, h * 0.12f, w * 0.88f, h * 0.17f)
+        cubicTo(w * 1.02f, h * 0.20f, w * 1.00f, h * 0.31f, w * 0.84f, h * 0.43f)
+        cubicTo(w * 0.66f, h * 0.57f, w * 0.36f, h * 0.78f, w * 0.13f, h * 0.82f)
+        cubicTo(w * 0.34f, h * 0.67f, w * 0.62f, h * 0.49f, w * 0.79f, h * 0.34f)
+        cubicTo(w * 0.91f, h * 0.24f, w * 0.88f, h * 0.23f, w * 0.78f, h * 0.26f)
+        cubicTo(w * 0.55f, h * 0.31f, w * 0.24f, h * 0.50f, w * 0.06f, h * 0.69f)
+        close()
+    }
+    val star = Path().apply {
+        moveTo(w * 0.64f, h * 0.17f)
+        cubicTo(w * 0.655f, h * 0.40f, w * 0.69f, h * 0.46f, w * 0.89f, h * 0.52f)
+        cubicTo(w * 0.69f, h * 0.58f, w * 0.655f, h * 0.64f, w * 0.64f, h * 0.88f)
+        cubicTo(w * 0.625f, h * 0.64f, w * 0.59f, h * 0.58f, w * 0.39f, h * 0.52f)
+        cubicTo(w * 0.59f, h * 0.46f, w * 0.625f, h * 0.40f, w * 0.64f, h * 0.17f)
+        close()
+    }
+    drawCircle(
+        Brush.radialGradient(listOf(Color(0x667E65C8), Color.Transparent), Offset(w * 0.64f, h * 0.52f), w * 0.31f),
+        radius = w * 0.31f, center = Offset(w * 0.64f, h * 0.52f), alpha = 0.32f * i,
+    )
+    val silver = Brush.linearGradient(
+        listOf(Color(0xFF596273), Color(0xFFF8FAFF), Color(0xFFB6A6E8), Color(0xFFE8ECF5), Color(0xFF777F91)),
+        Offset(w * 0.05f, h * 0.82f), Offset(w * 0.93f, h * 0.17f),
+    )
+    drawPath(orbit, silver, alpha = i)
+    drawPath(star, silver, alpha = i)
+}
 fun DrawScope.drawLightCross(intensity: Float = 1f, centre: Offset = center, extent: Float = size.minDimension) {
     val i = intensity.coerceIn(0f, 1.5f)
     val s = extent
@@ -68,7 +103,7 @@ fun DrawScope.drawLightCross(intensity: Float = 1f, centre: Offset = center, ext
 @Composable
 fun Wordmark(modifier: Modifier = Modifier, crossSize: Dp = 132.dp, showYear: Boolean = true, aside: String? = "MUSIC") {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-        LightCross(size = crossSize)
+        AstralEmblem(size = crossSize)
         Spacer(Modifier.height(20.dp))
         Txt("Astral", Type.Inscription)
         if (aside != null) {

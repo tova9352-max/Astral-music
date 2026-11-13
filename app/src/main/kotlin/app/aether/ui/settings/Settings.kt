@@ -134,7 +134,7 @@ fun SettingsScreen() {
             Column(Modifier.fillMaxWidth().padding(horizontal = Space.edge + 12.dp).padding(top = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 Txt("Settings", Type.Monument, align = TextAlign.Center)
                 Spacer(Modifier.height(14.dp))
-                Txt("How AETHER sounds, how it moves, and what it keeps.", Type.Aside, color = Ink.Grey, align = TextAlign.Center)
+                Txt("How Astral Music sounds, how it moves, and what it keeps.", Type.Aside, color = Ink.Grey, align = TextAlign.Center)
             }
         }
         item {
@@ -154,7 +154,7 @@ fun SettingsScreen() {
                     Words(
                         "YouTube Music",
                         if (session != null) "Signed in. Home, your library and mixes are your own."
-                        else "Sign in on Google's own page for your Home, library and mixes. AETHER never sees your password.",
+                        else "Sign in on Google's own page for your Home, library and mixes. Astral Music never sees your password.",
                         Modifier.weight(1f),
                     )
                     Spacer(Modifier.width(18.dp))
@@ -174,7 +174,7 @@ fun SettingsScreen() {
             Section("III", "Sources") {
                 Words(
                     "Your own sources",
-                    "Add a source by its address: your own server, or a library that speaks the addon protocol BitChord and LastWave use. For a song from YouTube Music, your sources are asked first for an exact copy (the same recording, the same length); the first that has one plays it, lossless when it is, and YouTube Music plays whatever they don't have. AETHER plays open media only, and ships no sources.",
+                    "Add a source by its address: your own server, or a library that speaks the addon protocol BitChord and LastWave use. For a song from YouTube Music, your sources are asked first for an exact copy (the same recording, the same length); the first that has one plays it, lossless when it is, and YouTube Music plays whatever they don't have. Astral Music plays open media only, and ships no sources.",
                     Modifier.padding(vertical = 18.dp),
                 )
                 val output by container.losslessOutput.state.collectAsStateWithLifecycle()
@@ -201,7 +201,7 @@ fun SettingsScreen() {
                     Words(
                         "Music folders",
                         phoneFolders?.let { f -> songsIncluded(f, phoneChoice).let { n -> "${songCount(n)} from the folders you've chosen. Voice notes and other apps' audio are left out unless you add them." } }
-                            ?: "Choose which of the phone's folders AETHER reads. They show on Listen, under On this phone.",
+                            ?: "Choose which of the phone's folders Astral Music reads. They show on Listen, under On this phone.",
                         Modifier.weight(1f),
                     )
                     Spacer(Modifier.width(18.dp))
@@ -335,7 +335,7 @@ fun SettingsScreen() {
                 if (container.updates.looksByItself) {
                     Toggle(
                         "Look for updates",
-                        "When AETHER opens, it asks GitHub, at most every few hours, whether there's a newer release, and offers it. Nothing about you goes with the question. The update is checked against the release and signed like your AETHER before Android is asked to install it.",
+                        "When Astral Music opens, it asks GitHub, at most every few hours, whether there's a newer release, and offers it. Nothing about you goes with the question. The update is checked against the release and signed like your Astral Music before Android is asked to install it.",
                         updatesAutomatic,
                     ) { container.updates.setAutomatic(!updatesAutomatic) }
                 }
@@ -353,7 +353,7 @@ fun SettingsScreen() {
         }
         item {
             Section("XII", "Privacy") {
-                Paragraph("AETHER has no analytics and no accounts. Your likes, playlists and history stay on this phone. The only requests it makes are the ones that load pages and play music, and, if you leave them on, the ones for timed lyrics, song video, artist and album art, and a newer AETHER. The music on the phone is read on the phone.")
+                Paragraph("Astral Music has no analytics and no accounts. Your likes, playlists and history stay on this phone. The only requests it makes are the ones that load pages and play music, and, if you leave them on, the ones for timed lyrics, song video, artist and album art, and a newer Astral Music. The music on the phone is read on the phone.")
             }
         }
         item {
@@ -452,8 +452,8 @@ private fun AddedSource(
             wantsLossless && !output.capable -> "$host. It asks to be used only with an output that carries lossless audio: wired or USB headphones, HDMI, or Bluetooth on LDAC, LHDC or aptX Lossless. " +
                 when {
                     output.bluetoothCodec != null -> "Your headphones are on ${output.bluetoothCodec}, so it waits."
-                    output.bluetoothCodecUnknown && !nearbyGranted -> "Android tells AETHER your headphones' codec only with Nearby devices."
-                    output.needsCompanion -> "Android names your headphones' codec only to an app it knows them by: allow AETHER once, and it can tell when they play over LDAC."
+                    output.bluetoothCodecUnknown && !nearbyGranted -> "Android tells Astral Music your headphones' codec only with Nearby devices."
+                    output.needsCompanion -> "Android names your headphones' codec only to an app it knows them by: allow Astral Music once, and it can tell when they play over LDAC."
                     output.bluetoothCodecUnknown -> "Android hasn't named your headphones' codec yet: it does when they connect."
                     else -> "None is connected, so it waits."
                 } + (companionTrouble?.let { " ($it)" }.orEmpty())

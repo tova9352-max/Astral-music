@@ -39,7 +39,7 @@ import androidx.core.content.res.ResourcesCompat
 import app.aether.core.designsystem.R
 import app.aether.core.designsystem.art.GlyphAtlas
 import app.aether.core.designsystem.component.Wordmark
-import app.aether.core.designsystem.component.drawLightCross
+import app.aether.core.designsystem.component.drawAstralEmblem
 import app.aether.core.designsystem.glass.LocalReduceMotion
 import app.aether.core.designsystem.theme.Ink
 import kotlinx.coroutines.delay
@@ -221,7 +221,7 @@ private class Mark(val full: Bitmap, val rect: FloatArray) {
             val px = (TEXELS_PER_UNIT * shot.slotH).roundToInt()
             val image = ImageBitmap(px, px)
             CanvasDrawScope().draw(Density(density), LayoutDirection.Ltr, androidx.compose.ui.graphics.Canvas(image), Size(px.toFloat(), px.toFloat())) {
-                drawLightCross(intensity = 1.25f)
+                drawAstralEmblem(intensity = 1.25f)
             }
             return fit(image.asAndroidBitmap(), shot)
         }

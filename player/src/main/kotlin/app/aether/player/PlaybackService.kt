@@ -176,7 +176,7 @@ class PlaybackService : MediaLibraryService() {
             onCarryEnded = ::onCarryEnded,
             soundAlignment = { SoundAlignment(meter, helperMeter) },
         )
-        // The player's notification wears AETHER's mark in the status bar, not Media3's play symbol.
+        // The player's notification wears Astral Music's orbital mark in the status bar, not Media3's play symbol.
         setMediaNotificationProvider(
             androidx.media3.session.DefaultMediaNotificationProvider.Builder(this).build().apply { setSmallIcon(R.drawable.aether_mark) },
         )
@@ -436,7 +436,7 @@ class PlaybackService : MediaLibraryService() {
             Futures.immediateFuture(
                 LibraryResult.ofItem(
                     MediaItem.Builder().setMediaId("root").setMediaMetadata(
-                        androidx.media3.common.MediaMetadata.Builder().setIsBrowsable(true).setIsPlayable(false).setTitle("AETHER").build(),
+                        androidx.media3.common.MediaMetadata.Builder().setIsBrowsable(true).setIsPlayable(false).setTitle("Astral Music").build(),
                     ).build(),
                     params,
                 ),

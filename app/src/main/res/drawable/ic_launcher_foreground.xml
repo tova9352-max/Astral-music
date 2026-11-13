@@ -7,11 +7,11 @@
     <path android:pathData="M8,68 C25,42 63,19 88,19 C105,19 106,31 91,44 C73,60 44,77 20,82 C44,69 69,54 83,41 C96,29 91,25 82,26 C58,28 27,48 8,68 Z">
         <aapt:attr name="android:fillColor">
             <gradient android:type="linear" android:startX="22" android:startY="77" android:endX="91" android:endY="22">
-                <item android:offset="0" android:color="#FF46505F" />
+                <item android:offset="0" android:color="#FF596273" />
                 <item android:offset="0.18" android:color="#FFF5F8FF" />
-                <item android:offset="0.36" android:color="#FF7C8799" />
+                <item android:offset="0.36" android:color="#FFB6A6E8" />
                 <item android:offset="0.56" android:color="#FFFFFFFF" />
-                <item android:offset="0.78" android:color="#FF929CAC" />
+                <item android:offset="0.78" android:color="#FF8994A7" />
                 <item android:offset="1" android:color="#FFEAF0FA" />
             </gradient>
         </aapt:attr>
@@ -22,7 +22,7 @@
                 <item android:offset="0" android:color="#FFFFFFFF" />
                 <item android:offset="0.28" android:color="#FF9AA5B8" />
                 <item android:offset="0.5" android:color="#FFFFFFFF" />
-                <item android:offset="0.72" android:color="#FF647084" />
+                <item android:offset="0.72" android:color="#FF777F91" />
                 <item android:offset="1" android:color="#FFF7FAFF" />
             </gradient>
         </aapt:attr>
