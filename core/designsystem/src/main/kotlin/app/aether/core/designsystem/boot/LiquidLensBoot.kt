@@ -52,7 +52,7 @@ import kotlin.math.roundToInt
 
 /**
  * The cold-start sting (the liquid-lens recording and its export): the cross of light under a
- * swelling dome of oil, then AETHER under a long low lens, decoding out of type. [speed] runs the
+ * swelling dome of oil, then ASTRAL under a long low lens, decoding out of type. [speed] runs the
  * 4-second film faster; a tap skips it; reduced motion shows only its last frame.
  */
 @Composable
@@ -226,7 +226,7 @@ private class Mark(val full: Bitmap, val rect: FloatArray) {
             return fit(image.asAndroidBitmap(), shot)
         }
 
-        /** Aether, signed in the script. */
+        /** Astral, signed in the script. */
         fun wordmark(context: Context, shot: LensFilm.Shot): Mark {
             val face = ResourcesCompat.getFont(context, R.font.pinyon_script)
             val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -237,7 +237,7 @@ private class Mark(val full: Bitmap, val rect: FloatArray) {
                 letterSpacing = 0f
                 textAlign = Paint.Align.CENTER
             }
-            val text = "Aether"
+            val text = "Astral"
             val w = (paint.measureText(text) * 1.08f).roundToInt()
             val h = (paint.textSize * 1.4f).roundToInt()
             val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
