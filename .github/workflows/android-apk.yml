@@ -37,7 +37,7 @@ jobs:
           cache-provider: basic
 
       - name: Build APK and run unit tests
-        run: ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:testDebugUnitTest
+        run: bash ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:testDebugUnitTest
 
       - name: Upload debug APK
         if: success()
