@@ -5,6 +5,7 @@ import app.aether.ui.common.rememberPageListState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,8 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.painterResource
+import app.aether.R
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.aether.core.designsystem.theme.separate
 import app.aether.core.designsystem.art.ArtTreatment
@@ -356,24 +359,32 @@ fun SettingsScreen() {
         item {
             Section("XIII", "About") {
                 Spacer(Modifier.height(16.dp))
-                Txt("AETHER ${container.updates.version}", Type.TitleSmall)
-                // What went wrong last time AETHER closed by itself: kept on the phone, sent only if you send it.
+                Image(
+                    painter = painterResource(R.drawable.ic_launcher_foreground),
+                    contentDescription = "Astral Music orbital star emblem",
+                    modifier = Modifier.size(112.dp).align(Alignment.CenterHorizontally),
+                )
+                Spacer(Modifier.height(8.dp))
+                Txt("ASTRAL MUSIC ${container.updates.version}", Type.TitleSmall, align = TextAlign.Center)
+                Txt("Tu música, Tus Gustos.", Type.Aside, color = Ink.Grey, align = TextAlign.Center)
+                Txt("Creado por Astral Studio", Type.Meta, color = Ink.Grey, align = TextAlign.Center)
+                // Diagnostic notes remain local unless the listener explicitly shares them.
                 var crash by remember { mutableStateOf(app.aether.CrashNote.read(context)) }
                 crash?.let { note ->
                     Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Words("AETHER closed by itself", "What went wrong is kept on this phone. Share it with whoever makes AETHER, if you like; nothing is sent otherwise.", Modifier.weight(1f))
+                        Words("Astral Music closed by itself", "The diagnostic note stays on this phone. Share it with Astral Studio if you choose; nothing is sent otherwise.", Modifier.weight(1f))
                         Spacer(Modifier.width(12.dp))
                         Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             GlassPill("Share", small = true, onClick = {
                                 val send = android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain").putExtra(android.content.Intent.EXTRA_TEXT, note)
-                                context.startActivity(android.content.Intent.createChooser(send, "Share what went wrong"))
+                                context.startActivity(android.content.Intent.createChooser(send, "Share diagnostic note"))
                             })
                             GlassPill("Clear", small = true, onClick = { app.aether.CrashNote.clear(context); crash = null })
                         }
                     }
                 }
                 Paragraph(
-                    "Free software under the GNU GPL v3. Built on PODIUM's, LastWave's, BitChord's and NewPipe's work, Media3, Coil and Kyant's Backdrop; set in Pinyon Script, EB Garamond, Montserrat and JetBrains Mono (SIL Open Font License).",
+                    "Free software under the GNU GPL v3. Astral Music builds on AETHER/PODIUM, LastWave, BitChord and NewPipe, plus Media3, Coil and Kyant's Backdrop. Original projects and third-party components retain their respective licenses and attributions. Typefaces include Pinyon Script, EB Garamond, Montserrat and JetBrains Mono (SIL Open Font License).",
                     top = 6.dp,
                 )
             }

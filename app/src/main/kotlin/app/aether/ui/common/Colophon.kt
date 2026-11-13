@@ -22,13 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.aether.R
-import app.aether.core.designsystem.component.LightCross
 import app.aether.core.designsystem.component.Txt
 import app.aether.core.designsystem.theme.Ink
 import app.aether.core.designsystem.theme.Type
 
 /**
- * The end of every page: AETHER's cross of light and its name, and just beneath them the Earth at
+ * The end of every page: Astral Music's orbital star emblem and name, and just beneath them the Earth at
  * night in black and white, its horizon lit. The page ends on the city lights themselves, with no
  * black beneath: by the time you reach it you've been reading down, so the dock has folded low and
  * floats over the lights, the horizon clear above it.
@@ -36,9 +35,14 @@ import app.aether.core.designsystem.theme.Type
 @Composable
 fun Colophon(modifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth().padding(top = 96.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        LightCross(size = 48.dp, intensity = 0.7f)
-        Spacer(Modifier.height(14.dp))
-        Txt("Aether", Type.Inscription.copy(fontSize = 30.sp, lineHeight = 34.sp), color = Ink.Grey)
+        Image(
+            painter = painterResource(R.drawable.ic_launcher_foreground),
+            contentDescription = "Astral Music orbital star emblem",
+            modifier = Modifier.height(58.dp).aspectRatio(1f),
+        )
+        Spacer(Modifier.height(10.dp))
+        Txt("Astral Music", Type.Inscription.copy(fontSize = 30.sp, lineHeight = 34.sp), color = Ink.Grey)
+        Txt("Tu música, Tus Gustos.", Type.Meta, color = Ink.Grey)
         Box(Modifier.fillMaxWidth().aspectRatio(740f / 493f)) {
             Image(
                 painterResource(R.drawable.art_earth),
