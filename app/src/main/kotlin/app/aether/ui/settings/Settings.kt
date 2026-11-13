@@ -135,7 +135,18 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("I", "Account") {
+            Section("I", "Apariencia") {
+                Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Words("Wallpaper", "Choose a photo for the home screen. The Liquid Glass stays above it.", Modifier.weight(1f))
+                    Spacer(Modifier.width(18.dp))
+                    GlassPill(if (wallpaper == null) "Choose image" else "Change image", small = true, onClick = { pickWallpaper.launch(arrayOf("image/*")) })
+                }
+                if (wallpaper != null) GlassPill("Remove wallpaper", small = true, onClick = { HomeWallpaper.clear(context) }, modifier = Modifier.padding(bottom = 14.dp))
+                Rule()
+            }
+        }
+        item {
+            Section("II", "Account") {
                 Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                     Words(
                         "YouTube Music",
@@ -157,7 +168,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("II", "Sources") {
+            Section("III", "Sources") {
                 Words(
                     "Your own sources",
                     "Add a source by its address: your own server, or a library that speaks the addon protocol BitChord and LastWave use. For a song from YouTube Music, your sources are asked first for an exact copy (the same recording, the same length); the first that has one plays it, lossless when it is, and YouTube Music plays whatever they don't have. AETHER plays open media only, and ships no sources.",
@@ -182,7 +193,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("III", "Music on this phone") {
+            Section("IV", "Music on this phone") {
                 Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                     Words(
                         "Music folders",
@@ -218,7 +229,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("IV", "Sound") {
+            Section("V", "Sound") {
                 Toggle("Data saver", "Lower-bitrate streams for metered networks. Off plays the best the source has.", efficient) { settings.setEfficient(!efficient) }
                 Choice(
                     title = "Crossfade",
@@ -240,16 +251,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("V", "Apariencia") {
-                Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Words("Wallpaper", "Choose a photo for the home screen. The Liquid Glass stays above it.", Modifier.weight(1f))
-                    Spacer(Modifier.width(18.dp))
-                    GlassPill(if (wallpaper == null) "Choose image" else "Change image", small = true, onClick = { pickWallpaper.launch(arrayOf("image/*")) })
-                }
-                if (wallpaper != null) GlassPill("Remove wallpaper", small = true, onClick = { HomeWallpaper.clear(context) }, modifier = Modifier.padding(bottom = 14.dp))
-                Rule()
-            }
-            Section("VI", "Feel") {
+            Section("VII", "Feel") {
                 Toggle("Haptics", "A light touch you can feel on the actions that matter.", haptics) { settings.setHaptics(!haptics) }
                 Toggle("Reduce motion", "No stretch, ripples or drifting. Also follows your phone's setting.", reduce) { settings.setReduceMotion(!reduce) }
                 Toggle("Full screen", "Android's bars hidden, the clock above and the keys below, so the page has the whole screen. A swipe from the edge brings them for a moment.", fullScreen) { settings.setFullScreen(!fullScreen) }
@@ -263,7 +265,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("VII", "Now Playing") {
+            Section("VIII", "Now Playing") {
                 Toggle(
                     "Timed lyrics",
                     "Words in time with the song, word by word where a library has them, from the lyrics libraries below. They're asked together and the best answer is kept; asking sends a song's title, artist, album and length, nothing else. Off, the music service's own words are shown.",
@@ -311,7 +313,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("VIII", "Artists and albums") {
+            Section("IX", "Artists and albums") {
                 Toggle(
                     "Artist and album art",
                     "A portrait, the artist's own lettering and a short film at the head of their page, and an album's moving cover at the head of its, from Apple Music's public pages, for those who have them. It also asks what kind of music your most played artists make, for your Profile. Asking sends the artist's name and the album's title; nothing else. Off, or on the data saver for the films, a page uses what the source gives.",
@@ -320,13 +322,13 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("IX", "Your data") {
+            Section("X", "Your data") {
                 Erase("Listening history", "Everything you've played, gone from this phone.") { scope.launch { container.library.clearHistory() } }
                 Erase("Recent searches", "What you've looked for on Discover.") { scope.launch { container.library.clearSearches() } }
             }
         }
         item {
-            Section("X", "Software update") {
+            Section("XI", "Software update") {
                 if (container.updates.looksByItself) {
                     Toggle(
                         "Look for updates",
@@ -347,12 +349,12 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("XI", "Privacy") {
+            Section("XII", "Privacy") {
                 Paragraph("AETHER has no analytics and no accounts. Your likes, playlists and history stay on this phone. The only requests it makes are the ones that load pages and play music, and, if you leave them on, the ones for timed lyrics, song video, artist and album art, and a newer AETHER. The music on the phone is read on the phone.")
             }
         }
         item {
-            Section("XII", "About") {
+            Section("XIII", "About") {
                 Spacer(Modifier.height(16.dp))
                 Txt("AETHER ${container.updates.version}", Type.TitleSmall)
                 // What went wrong last time AETHER closed by itself: kept on the phone, sent only if you send it.

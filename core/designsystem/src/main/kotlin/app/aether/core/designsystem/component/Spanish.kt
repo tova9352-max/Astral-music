@@ -1,7 +1,7 @@
 package app.aether.core.designsystem.component
 
 /** Common interface copy, translated without changing catalogue-provided song and artist titles. */
-fun spanish(text: String): String = SpanishCopy[text] ?: text
+fun spanish(text: String): String = SpanishCopy[text] ?: text.replace("AETHER", "Astral Music")
 
 private val SpanishCopy = mapOf(
 "Listen" to "Escuchar", "Discover" to "Descubrir", "Library" to "Biblioteca", "Profile" to "Perfil",
@@ -34,5 +34,51 @@ private val SpanishCopy = mapOf(
 "Cancel" to "Cancelar", "Done" to "Listo", "Wallpaper" to "Fondo de pantalla",
 "Choose a photo for the home screen. The Liquid Glass stays above it." to "Elige una imagen para la pantalla principal. El cristal líquido seguirá por encima.",
 "Choose image" to "Elegir imagen", "Change image" to "Cambiar imagen", "Remove wallpaper" to "Quitar fondo",
-"Appearance" to "Apariencia"
+"Appearance" to "Apariencia",
+
+"How Astral Music sounds, how it moves, and what it keeps." to "Cómo suena Astral Music, cómo se mueve y qué guarda.",
+"How AETHER sounds, how it moves, and what it keeps." to "Cómo suena Astral Music, cómo se mueve y qué guarda.",
+"Signed in. Home, your library and mixes are your own." to "Sesión iniciada. Tu inicio, biblioteca y mezclas son tuyos.",
+"Sign in on Google's own page for your Home, library and mixes. AETHER never sees your password." to "Inicia sesión en la página oficial de Google para acceder a tu inicio, biblioteca y mezclas. Astral Music nunca ve tu contraseña.",
+"Add a source by its address: your own server, or a library that speaks the addon protocol BitChord and LastWave use. For a song from YouTube Music, your sources are asked first for an exact copy (the same recording, the same length); the first that has one plays it, lossless when it is, and YouTube Music plays whatever they don't have. AETHER plays open media only, and ships no sources." to "Añade una fuente con su dirección: tu propio servidor o una biblioteca compatible con el protocolo de complementos que usan BitChord y LastWave. Para cada canción de YouTube Music, primero se buscan copias exactas en tus fuentes. Se reproduce la primera disponible, con calidad sin pérdida cuando sea posible; YouTube Music reproduce las demás. Astral Music solo reproduce contenido abierto y no incluye fuentes propias.",
+"Lower-bitrate streams for metered networks. Off plays the best the source has." to "Reduce la calidad de transmisión en redes con datos limitados. Desactivado reproduce con la mejor calidad disponible.",
+"The end of one song and the start of the next play together for this many seconds, one going down as the other comes up. Never between an album's songs that run into each other, nor while a DAC plays bit-perfect." to "Mezcla el final de una canción con el comienzo de la siguiente durante los segundos elegidos. No se aplica entre canciones enlazadas de un álbum ni durante la reproducción perfecta mediante DAC.",
+"Off. Tunings, corrections measured for your headphones, or a profile of your own." to "Desactivado. Usa ajustes, correcciones medidas para tus auriculares o crea tu propio perfil.",
+"A light touch you can feel on the actions that matter." to "Una respuesta táctil suave en las acciones importantes.",
+"No stretch, ripples or drifting. Also follows your phone's setting." to "Desactiva estiramientos, ondas y movimientos. También respeta el ajuste de tu teléfono.",
+"Android's bars hidden, the clock above and the keys below, so the page has the whole screen. A swipe from the edge brings them for a moment." to "Oculta las barras de Android para aprovechar toda la pantalla. Desliza desde el borde para mostrarlas momentáneamente.",
+"Simple is PODIUM's glass: frosted, lit at the rim, the screen's edges fading to black. Liquid bends light at every edge and frosts the screen's edges live; it asks much more of the phone." to "El modo Simple usa cristal esmerilado con bordes iluminados y un degradado oscuro. El modo Líquido refracta la luz y desenfoca los bordes en tiempo real; requiere más recursos del teléfono.",
+"Words in time with the song, word by word where a library has them, from the lyrics libraries below. They're asked together and the best answer is kept; asking sends a song's title, artist, album and length, nothing else. Off, the music service's own words are shown." to "Muestra la letra sincronizada con la canción, palabra por palabra cuando esté disponible. Se consultan las bibliotecas de abajo y se conserva el mejor resultado. La consulta solo envía el título, artista, álbum y duración de la canción. Si se desactiva, se muestra la letra del servicio musical.",
+"How lyrics are drawn" to "Estilo de visualización de letras",
+"Verse sets the song as a page that's sung, each word lighting as it's sung; touch a line to go to it. Constellations sets each word as a star in a night sky. Line writes the song by hand, as one unbroken line." to "Verso muestra la letra como una página y resalta cada palabra al cantarse. Constelaciones convierte las palabras en estrellas. Línea presenta toda la letra como un trazo continuo.",
+"Lyrics in another script are given in Latin letters too: Korean as it's said, Chinese in pinyin, Japanese where it's in kana, and the rest. Worked out on the phone; nothing is sent. The Latin key on the lyrics turns it off and on." to "Muestra también en letras latinas las letras escritas en otros alfabetos, como coreano, chino o japonés. El proceso se realiza en el teléfono y no envía datos.",
+"A song's cover gives way to its short film, in colour, for the albums Apple Music has one for, once it has loaded at its best; a music video plays as itself, in step with the music. The video key on Now Playing switches it too. Not loaded on a slow connection or the data saver. Asking Apple sends the song's title and artist; nothing else. A song's film needs Artist and album art." to "La portada puede convertirse en un breve vídeo para los álbumes compatibles de Apple Music. Los vídeos musicales se reproducen sincronizados con la canción. No se cargan con conexiones lentas ni con el ahorro de datos. La consulta a Apple solo envía el título y el artista.",
+"How the print is shown on Now Playing. A song that has a music video plays it in the cover's place when you press the video key there." to "Define cómo se muestra la portada en la pantalla Reproduciendo. Si la canción tiene un vídeo musical, puedes mostrarlo en su lugar.",
+"A portrait, the artist's own lettering and a short film at the head of their page, and an album's moving cover at the head of its, from Apple Music's public pages, for those who have them. It also asks what kind of music your most played artists make, for your Profile. Asking sends the artist's name and the album's title; nothing else. Off, or on the data saver for the films, a page uses what the source gives." to "Muestra retratos, tipografía y vídeos de artistas, además de portadas animadas de álbumes cuando Apple Music los ofrece. También identifica los estilos musicales de tus artistas más escuchados. Solo se envían los nombres del artista y del álbum.",
+"Everything you've played, gone from this phone." to "Borra del teléfono todo tu historial de reproducción.",
+"What you've looked for on Discover." to "Borra las búsquedas recientes de la sección Descubrir.",
+"When AETHER opens, it asks GitHub, at most every few hours, whether there's a newer release, and offers it. Nothing about you goes with the question. The update is checked against the release and signed like your AETHER before Android is asked to install it." to "Al abrir Astral Music, se consulta a GitHub cada cierto tiempo para comprobar si hay una versión nueva. No se envía información personal. La actualización se verifica antes de solicitar a Android que la instale.",
+"The version on this phone." to "Versión instalada en este teléfono.",
+"A test build: it looks for updates only when asked, and a release installs from GitHub." to "Versión de prueba: solo busca actualizaciones cuando lo solicitas. Las versiones estables se instalan desde GitHub.",
+"AETHER has no analytics and no accounts. Your likes, playlists and history stay on this phone. The only requests it makes are the ones that load pages and play music, and, if you leave them on, the ones for timed lyrics, song video, artist and album art, and a newer AETHER. The music on the phone is read on the phone." to "Astral Music no utiliza análisis de uso ni crea cuentas. Tus canciones favoritas, listas e historial permanecen en este teléfono. Solo se conecta para cargar páginas y reproducir música, y para consultar letras sincronizadas, vídeos, imágenes de artistas y álbumes o nuevas versiones si activas esas funciones. La música almacenada en el teléfono se procesa localmente.",
+"AETHER ${container.updates.version}" to "Astral Music ${container.updates.version}",
+"What went wrong is kept on this phone. Share it with whoever makes AETHER, if you like; nothing is sent otherwise." to "El informe del error se guarda en este teléfono. Si quieres, puedes compartirlo con el equipo de Astral Music; de lo contrario, no se envía nada.",
+"Free software under the GNU GPL v3. Built on PODIUM's, LastWave's, BitChord's and NewPipe's work, Media3, Coil and Kyant's Backdrop; set in Pinyon Script, EB Garamond, Montserrat and JetBrains Mono (SIL Open Font License)." to "Software libre bajo la licencia GNU GPL v3. Basado en el trabajo de PODIUM, LastWave, BitChord y NewPipe, además de Media3, Coil y Backdrop de Kyant. Tipografías: Pinyon Script, EB Garamond, Montserrat y JetBrains Mono (SIL Open Font License).",
+"Source address" to "Dirección de la fuente",
+"That source is already in your list." to "Esa fuente ya está en tu lista.",
+"That address didn't answer as a source." to "Esa dirección no respondió como una fuente compatible.",
+"That address didn't answer. Check it, and your connection, and try again." to "La dirección no respondió. Comprueba la dirección y tu conexión e inténtalo de nuevo.",
+"A source" to "Una fuente",
+"Try again" to "Intentar de nuevo",
+"Nearby devices" to "Dispositivos cercanos",
+"Allow headphones" to "Permitir acceso a los auriculares",
+"Android didn't say which headphones are connected." to "Android no indicó qué auriculares están conectados.",
+"Cleared" to "Borrado",
+"Touch again" to "Toca otra vez",
+"Settings" to "Ajustes", "Account" to "Cuenta", "Sources" to "Fuentes", "Your own sources" to "Tus propias fuentes",
+"Music on this phone" to "Música en este teléfono", "Sound" to "Sonido", "Feel" to "Experiencia",
+"Artists and albums" to "Artistas y álbumes", "Your data" to "Tus datos", "Software update" to "Actualización de software",
+"Privacy" to "Privacidad", "About" to "Acerca de", "Wallpaper" to "Fondo de pantalla",
+"Choose image" to "Elegir imagen", "Change image" to "Cambiar imagen", "Remove wallpaper" to "Quitar fondo"
+
 )
