@@ -211,7 +211,7 @@ fun SettingsScreen() {
                 Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                     Words(
                         "Lyrics files",
-                        if (lyricsFolders.isEmpty()) "A song's words are read from its own file. To read .lrc files beside your songs (Song.lrc for Song.flac), let AETHER read the folder they're in."
+                        if (lyricsFolders.isEmpty()) "A song's words are read from its own file. To read .lrc files beside your songs (Song.lrc for Song.flac), let Astral Music read the folder they're in."
                         else "The .lrc files in ${lyricsFolders.joinToString { folderName(it) }}, for the songs beside them, and the words inside every song's own file.",
                         Modifier.weight(1f),
                     )
