@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <!-- AETHER's own updates: a release downloaded from GitHub, checked, then handed to Android's
+    <!-- Astral Music's own updates: a release downloaded from GitHub, checked, then handed to Android's
          installer, which asks the listener to confirm. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- Nearby devices, asked for only when an addon wants a lossless output: Android names the codec
@@ -20,7 +20,7 @@
         android:name=".AetherApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="AETHER"
+        android:label="Astral Music"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aether">
 
