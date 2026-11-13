@@ -48,10 +48,10 @@ sealed interface Route {
 
 /** Four rooms, few enough to hold in one hand. */
 enum class Tab(val label: String, val root: Route) {
-    Listen("Listen", Route.Home),
-    Discover("Discover", Route.Search),
-    Library("Library", Route.Library),
-    Profile("Profile", Route.Profile),
+    Listen("Escuchar", Route.Home),
+    Discover("Descubrir", Route.Search),
+    Library("Biblioteca", Route.Library),
+    Profile("Perfil", Route.Profile),
 }
 
 /** Where a page is in its life on a stack. */

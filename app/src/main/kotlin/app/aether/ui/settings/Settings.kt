@@ -70,6 +70,7 @@ import app.aether.core.model.Outcome
 import app.aether.core.model.SourceError
 import app.aether.sources.addon.AddonSource
 import app.aether.ui.common.NameDialog
+import app.aether.ui.home.HomeWallpaper
 
 /**
  * Settings, set like the back pages of a magazine rather than a form: numbered heads in spaced
@@ -109,6 +110,11 @@ fun SettingsScreen() {
     var addError by remember { mutableStateOf<String?>(null) }
     val choices by settings.addonChoices.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    LaunchedEffect(Unit) { HomeWallpaper.load(context) }
+    val wallpaper = HomeWallpaper.uri
+    val pickWallpaper = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { selected ->
+        if (selected != null) HomeWallpaper.set(context, selected)
+    }
     val lyricsFolders by settings.lyricsFolders.collectAsStateWithLifecycle()
     // Android's own folder picker: the folder chosen is read, nothing else, until it's removed here.
     val pickFolder = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree()) { tree ->
@@ -234,7 +240,16 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("V", "Feel") {
+            Section("V", "Apariencia") {
+                Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Words("Wallpaper", "Choose a photo for the home screen. The Liquid Glass stays above it.", Modifier.weight(1f))
+                    Spacer(Modifier.width(18.dp))
+                    GlassPill(if (wallpaper == null) "Choose image" else "Change image", small = true, onClick = { pickWallpaper.launch(arrayOf("image/*")) })
+                }
+                if (wallpaper != null) GlassPill("Remove wallpaper", small = true, onClick = { HomeWallpaper.clear(context) }, modifier = Modifier.padding(bottom = 14.dp))
+                Rule()
+            }
+            Section("VI", "Feel") {
                 Toggle("Haptics", "A light touch you can feel on the actions that matter.", haptics) { settings.setHaptics(!haptics) }
                 Toggle("Reduce motion", "No stretch, ripples or drifting. Also follows your phone's setting.", reduce) { settings.setReduceMotion(!reduce) }
                 Toggle("Full screen", "Android's bars hidden, the clock above and the keys below, so the page has the whole screen. A swipe from the edge brings them for a moment.", fullScreen) { settings.setFullScreen(!fullScreen) }
@@ -248,7 +263,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("VI", "Now Playing") {
+            Section("VII", "Now Playing") {
                 Toggle(
                     "Timed lyrics",
                     "Words in time with the song, word by word where a library has them, from the lyrics libraries below. They're asked together and the best answer is kept; asking sends a song's title, artist, album and length, nothing else. Off, the music service's own words are shown.",
@@ -296,7 +311,7 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("VII", "Artists and albums") {
+            Section("VIII", "Artists and albums") {
                 Toggle(
                     "Artist and album art",
                     "A portrait, the artist's own lettering and a short film at the head of their page, and an album's moving cover at the head of its, from Apple Music's public pages, for those who have them. It also asks what kind of music your most played artists make, for your Profile. Asking sends the artist's name and the album's title; nothing else. Off, or on the data saver for the films, a page uses what the source gives.",
@@ -305,13 +320,13 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("VIII", "Your data") {
+            Section("IX", "Your data") {
                 Erase("Listening history", "Everything you've played, gone from this phone.") { scope.launch { container.library.clearHistory() } }
                 Erase("Recent searches", "What you've looked for on Discover.") { scope.launch { container.library.clearSearches() } }
             }
         }
         item {
-            Section("IX", "Software update") {
+            Section("X", "Software update") {
                 if (container.updates.looksByItself) {
                     Toggle(
                         "Look for updates",
@@ -321,7 +336,7 @@ fun SettingsScreen() {
                 }
                 Row(Modifier.fillMaxWidth().padding(vertical = 18.dp), verticalAlignment = Alignment.CenterVertically) {
                     Words(
-                        "AETHER ${container.updates.version}",
+                        "Astral Music ${container.updates.version}",
                         if (container.updates.looksByItself) "The version on this phone." else "A test build: it looks for updates only when asked, and a release installs from GitHub.",
                         Modifier.weight(1f),
                     )
@@ -332,12 +347,12 @@ fun SettingsScreen() {
             }
         }
         item {
-            Section("X", "Privacy") {
+            Section("XI", "Privacy") {
                 Paragraph("AETHER has no analytics and no accounts. Your likes, playlists and history stay on this phone. The only requests it makes are the ones that load pages and play music, and, if you leave them on, the ones for timed lyrics, song video, artist and album art, and a newer AETHER. The music on the phone is read on the phone.")
             }
         }
         item {
-            Section("XI", "About") {
+            Section("XII", "About") {
                 Spacer(Modifier.height(16.dp))
                 Txt("AETHER ${container.updates.version}", Type.TitleSmall)
                 // What went wrong last time AETHER closed by itself: kept on the phone, sent only if you send it.

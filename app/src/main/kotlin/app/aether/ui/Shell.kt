@@ -534,7 +534,7 @@ private fun BoxScope.SettingsKey(nav: Navigator, screenWidth: Float) {
 
 /** "Nº 308 · Wed 4 Nov": the day of the year, as an issue of a magazine is numbered. */
 private fun dayLine(today: LocalDate): String {
-    val locale = Locale.getDefault()
+    val locale = Locale.forLanguageTag("es-CO")
     val weekday = today.dayOfWeek.getDisplayName(TextStyle.SHORT, locale)
     val month = today.month.getDisplayName(TextStyle.SHORT, locale)
     return "Nº ${today.dayOfYear}  ·  $weekday ${today.dayOfMonth} $month"

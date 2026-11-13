@@ -28,7 +28,7 @@ fun Txt(
     // A style asking for capitals' forms (`case`) is set in capitals.
     val caps = upper || style.fontFeatureSettings?.contains("case") == true
     BasicText(
-        text = text.withoutEmoji().let { if (caps) it.uppercase() else it },
+        text = spanish(text).withoutEmoji().let { if (caps) it.uppercase() else it },
         modifier = modifier,
         style = style.copy(color = color, textAlign = align ?: style.textAlign),
         maxLines = maxLines,

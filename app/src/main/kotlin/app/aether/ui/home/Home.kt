@@ -23,6 +23,11 @@ import app.aether.ui.common.rememberPageListState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.BlurEffect
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -189,6 +194,9 @@ private fun sectionKey(section: FeedSection): String = "s:${section.title}:${sec
 fun HomeScreen() {
     val container = LocalContainer.current
     val actions = LocalActions.current
+    val context = LocalContext.current
+    LaunchedEffect(Unit) { HomeWallpaper.load(context) }
+    val wallpaper = HomeWallpaper.uri
     val source = container.sources.primary
     var filterTitle by rememberSaveable { mutableStateOf<String?>(null) }
     var filters by remember { mutableStateOf(container.catalog.peek<List<FeedFilter>>("home:filters").orEmpty()) }
@@ -227,7 +235,15 @@ fun HomeScreen() {
     }
     // A finger anywhere on the page, watched without being taken: the figures wait while one is down.
     var touching by remember { mutableStateOf(false) }
-    LazyColumn(
+    Box(Modifier.fillMaxSize()) {
+        if (wallpaper != null) {
+            AsyncImage(model = wallpaper, contentDescription = null, contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().graphicsLayer {
+                    renderEffect = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) BlurEffect(22f, 22f, TileMode.Clamp) else null
+                })
+            Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.70f)))
+        }
+        LazyColumn(
         Modifier.fillMaxSize().pointerInput(Unit) {
             awaitPointerEventScope {
                 while (true) {
@@ -298,12 +314,13 @@ fun HomeScreen() {
                 }
             }
         }
+        }
     }
 }
 
 /**
  * The front page's head: a classical statue, printed as a fine halftone in white ink on black,
- * emerging slowly out of the dark; "Listen", oversized, over the fall of its drapery. Art first, as
+ * emerging slowly out of the dark; "Escuchar", oversized, over the fall of its drapery. Art first, as
  * a jeweller's catalogue opens on a photograph rather than a list.
  *
  * The figures change only when nothing else is happening. Each is held for [StatueHoldMs] of being
