@@ -90,14 +90,14 @@ import app.aether.ui.common.LocalContainer
 import kotlinx.coroutines.delay
 
 /**
- * The welcome's wordmark: Aether, signed in the script, the size the boot film's resolves to, with
+ * The welcome's wordmark: Astral, signed in the script, the size the boot film's resolves to, with
  * a faint halo of its own light so it stands forward of the dark water.
  */
 val MastheadStyle = Type.Inscription.copy(fontSize = 68.sp, lineHeight = 76.sp, shadow = Shadow(Color.White.copy(alpha = 0.24f), blurRadius = 38f))
 
 /**
  * The first visit: dark water at night, moving slowly, light catching its ripples in silver (a
- * filmed sea, in black and white, looping with no seam). The wordmark the boot film
+ * filmed sea, in black and white, looping with no seam). The Astral wordmark the boot film
  * handed over sits in the middle, where the film left it, a line of small capitals beneath. At the
  * foot, three keys of the tab bar's glass, refracting the water: YouTube Music (optional), timed
  * lyrics, and offline. Each asks for what it needs only when touched. Then Enter.
@@ -153,7 +153,7 @@ fun Onboarding(onDone: () -> Unit, modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Txt(
-                    "Aether",
+                    "Astral",
                     MastheadStyle,
                     modifier = Modifier
                         .onGloballyPositioned { arrival.masthead = it.boundsInRoot() }
