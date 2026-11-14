@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
 import app.aether.core.designsystem.component.Pull
 import android.os.Build
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -45,6 +49,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
@@ -230,6 +235,12 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
                 // pixels of the cover, blurred once and cached, stretched over the screen.
                 SoftArt(track.artwork, Modifier.fillMaxSize().alpha(0.34f), px = 32)
                 Box(Modifier.fillMaxSize().background(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.2f), 0.5f to Color.Black.copy(alpha = 0.6f), 1f to Color.Black)))
+                val atmospherePosition by container.playback.position.collectAsStateWithLifecycle()
+                AstralAtmosphere(
+                    active = state.isPlaying && !still && !lyricsUp,
+                    progress = if (state.durationMs > 0) atmospherePosition.toFloat() / state.durationMs.toFloat() else 0f,
+                    modifier = Modifier.fillMaxSize(),
+                )
                 // The cover as it is can move; a print of it stays a print. A music video plays as
                 // itself instead, and only gives way to its film if it can't play.
                 if (treatment == ArtTreatment.Original) films.toList().forEach { film ->
@@ -417,6 +428,64 @@ private class Stage(w: Dp, h: Dp, top: Dp, bottom: Dp) {
  * decoder measured. A line too long for the screen drifts slowly sideways, fading at its edges.
  */
 @Composable
+/**
+ * Astral Atmosphere: slow orbital light and glass rings behind the artwork.
+ * It follows playback position and pauses its movement when playback is paused or motion is reduced.
+ */
+@Composable
+private fun AstralAtmosphere(active: Boolean, progress: Float, modifier: Modifier = Modifier) {
+    val reduceMotion = LocalReduceMotion.current
+    val transition = rememberInfiniteTransition(label = "astral-atmosphere")
+    val phase by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(animation = tween(7200, easing = LinearEasing)),
+        label = "orbital-phase",
+    )
+    Canvas(modifier.alpha(if (active) 1f else 0.52f)) {
+        val shortest = minOf(size.width, size.height)
+        val center = Offset(size.width * 0.5f, size.height * 0.39f)
+        val motion = if (active && !reduceMotion) phase else 0.18f
+        val pulse = if (active && !reduceMotion) (0.5f + 0.5f * sin(phase * 2f * PI.toFloat())) else 0.28f
+        val travel = (progress.coerceIn(0f, 1f) * 0.16f)
+        val glowRadius = shortest * (0.31f + pulse * 0.035f + travel)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(Color(0x3A9CA9C5), Color(0x247B68B0), Color.Transparent),
+                center = center,
+                radius = glowRadius * 1.75f,
+            ),
+            radius = glowRadius * 1.75f,
+            center = center,
+        )
+        for (index in 0..3) {
+            val offset = if (reduceMotion || !active) 0.22f else (motion + index * 0.23f) % 1f
+            val radius = shortest * (0.22f + offset * 0.29f + travel * 0.25f)
+            val alpha = (if (active) 0.13f else 0.045f) * (1f - offset * 0.48f)
+            drawCircle(
+                color = Color(0xFFDDE5F4).copy(alpha = alpha),
+                radius = radius,
+                center = Offset(center.x, center.y + shortest * 0.025f),
+                style = Stroke(width = (0.8f + pulse * 0.65f).dp.toPx()),
+            )
+        }
+        // A fine silver horizon gives the artwork a subtle reflected edge.
+        val horizonY = size.height * (0.73f + travel * 0.025f)
+        drawLine(
+            brush = Brush.horizontalGradient(
+                0f to Color.Transparent,
+                0.24f to Color(0x00DCE4F3),
+                0.5f to Color(0x24DCE4F3).copy(alpha = if (active) 0.30f + pulse * 0.12f else 0.10f),
+                0.76f to Color(0x00DCE4F3),
+                1f to Color.Transparent,
+            ),
+            start = Offset(size.width * 0.08f, horizonY),
+            end = Offset(size.width * 0.92f, horizonY),
+            strokeWidth = 1.dp.toPx(),
+        )
+    }
+}
+
 private fun Song(track: Track, state: PlaybackState, onArtist: () -> Unit, onAlbum: () -> Unit, modifier: Modifier) {
     val (name, aside) = remember(track.title) { splitTitle(track.title) }
     // Playing from one of the listener's own sources, an exact copy: said beside what the decoder measured.
