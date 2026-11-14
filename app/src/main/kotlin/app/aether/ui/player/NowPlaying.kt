@@ -131,7 +131,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
 import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.cos
@@ -427,7 +426,6 @@ private class Stage(w: Dp, h: Dp, top: Dp, bottom: Dp) {
  * Princess") in the serif, small and grey, beneath; who made it (a way to them); and what the
  * decoder measured. A line too long for the screen drifts slowly sideways, fading at its edges.
  */
-@Composable
 /**
  * Astral Atmosphere: slow orbital light and glass rings behind the artwork.
  * It follows playback position and pauses its movement when playback is paused or motion is reduced.
@@ -486,6 +484,7 @@ private fun AstralAtmosphere(active: Boolean, progress: Float, modifier: Modifie
     }
 }
 
+@Composable
 private fun Song(track: Track, state: PlaybackState, onArtist: () -> Unit, onAlbum: () -> Unit, modifier: Modifier) {
     val (name, aside) = remember(track.title) { splitTitle(track.title) }
     // Playing from one of the listener's own sources, an exact copy: said beside what the decoder measured.
