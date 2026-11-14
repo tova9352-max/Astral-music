@@ -100,6 +100,7 @@ import app.aether.ui.common.Load
 import app.aether.ui.common.LocalContainer
 import app.aether.ui.common.rememberLoad
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 import kotlin.math.abs
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -871,6 +872,7 @@ fun rememberLyrics(track: Track): Load<Lyrics?> {
 @Composable
 private fun QueueSheet(state: PlaybackState) {
     val actions = LocalActions.current
+    val container = LocalContainer.current
     val haptics = LocalHaptics.current
     val density = LocalDensity.current
     val scope = rememberCoroutineScope()
@@ -978,7 +980,28 @@ private fun QueueSheet(state: PlaybackState) {
                 Spacer(Modifier.height(6.dp))
                 Strapline(songCount(state.upcoming.size))
             }
-            if (state.upcoming.isNotEmpty()) GlassPill("Clear", icon = Glyph.Trash, onClick = { actions.playback.clearUpcoming() }, small = true)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                GlassPill("Flow", onClick = {
+                    scope.launch {
+                        val queued = state.queue.mapTo(mutableSetOf()) { it.id }
+                        val currentArtists = state.current?.artists.orEmpty().map { it.name.lowercase() }.toSet()
+                        val recent = runCatching { container.library.recent(100).first() }.getOrDefault(emptyList())
+                        val picks = recent.asSequence()
+                            .filter { it.kind == app.aether.core.model.MediaKind.SONG && it.available && it.id !in queued }
+                            .distinctBy { it.id }
+                            .map { candidate ->
+                                val overlap = candidate.artists.count { it.name.lowercase() in currentArtists }
+                                candidate to overlap
+                            }
+                            .sortedWith(compareByDescending<Pair<Track, Int>> { it.second }.thenBy { recent.indexOf(it.first) })
+                            .take(12)
+                            .map { it.first }
+                            .toList()
+                        if (picks.isNotEmpty()) actions.playback.extend(picks)
+                    }
+                }, small = true)
+                if (state.upcoming.isNotEmpty()) GlassPill("Clear", icon = Glyph.Trash, onClick = { actions.playback.clearUpcoming() }, small = true)
+            }
         }
         Box(Modifier.fillMaxSize()) {
             LazyColumn(Modifier.fillMaxSize().padding(horizontal = Space.edge), state = list) {
