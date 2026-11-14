@@ -9,6 +9,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import androidx.media3.common.Tracks
 import androidx.media3.session.MediaController
+import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionToken
 import app.aether.core.model.HeardFormat
 import app.aether.core.model.PlaybackState
@@ -149,6 +150,17 @@ class PlaybackConnection(private val context: Context, private val scope: Corout
 
     fun setShuffle(on: Boolean) = with { c -> c.shuffleModeEnabled = on }
 
+    fun setSleepTimer(minutes: Int, fadeSeconds: Int = 15) = with { c ->
+        c.sendCustomCommand(
+            SessionCommand(ACTION_SLEEP_TIMER, Bundle.EMPTY),
+            Bundle().apply { putInt("minutes", minutes.coerceIn(1, 180)); putInt("fadeSeconds", fadeSeconds.coerceIn(0, 30)) },
+        )
+    }
+
+    fun cancelSleepTimer() = with { c ->
+        c.sendCustomCommand(SessionCommand(ACTION_SLEEP_CANCEL, Bundle.EMPTY), Bundle.EMPTY)
+    }
+
     fun cycleRepeat() = with { c ->
         c.repeatMode = when (c.repeatMode) {
             Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
@@ -274,3 +286,6 @@ internal fun android.os.Bundle.heardFormat(): HeardFormat = HeardFormat(
     bitrateKbps = getInt("kbps", 0).takeIf { it > 0 },
     lossless = getBoolean("lossless", false),
 )
+
+internal const val ACTION_SLEEP_TIMER = "app.astral.music.SLEEP_TIMER"
+internal const val ACTION_SLEEP_CANCEL = "app.astral.music.SLEEP_CANCEL"

@@ -26,6 +26,8 @@ import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
+import androidx.media3.session.SessionCommand
+import androidx.media3.session.SessionResult
 import app.aether.core.model.HeardFormat
 import app.aether.core.model.MediaId
 import app.aether.core.model.Outcome
@@ -119,6 +121,8 @@ class PlaybackService : MediaLibraryService() {
     private lateinit var player: ExoPlayer
     private var session: MediaLibrarySession? = null
     private var saveJob: Job? = null
+    private var sleepJob: Job? = null
+    private var sleepOriginalVolume = 1f
     /** The song last recovered, how many times in a row, and when last. */
     private var retried: Triple<String, Int, Long>? = null
     private var counted: String? = null
@@ -287,6 +291,7 @@ class PlaybackService : MediaLibraryService() {
     override fun onDestroy() {
         if (Build.VERSION.SDK_INT >= 34) (bitPerfect as? BitPerfect)?.stop()
         saveNow()
+        sleepJob?.cancel()
         crossfader.release()
         session?.release()
         session = null
@@ -313,6 +318,29 @@ class PlaybackService : MediaLibraryService() {
         // The album by its id where the source gives one; on the phone, by its name and its maker.
         val album = track.album?.let { it.id?.value ?: "${it.title}|${track.artists.firstOrNull()?.name.orEmpty()}" }
         return CrossfadeRules.Song(album, track.trackNumber, duration)
+    }
+
+    private fun cancelSleepTimer() {
+        sleepJob?.cancel()
+        sleepJob = null
+        player.volume = sleepOriginalVolume
+    }
+
+    private fun startSleepTimer(minutes: Int, fadeSeconds: Int) {
+        cancelSleepTimer()
+        sleepOriginalVolume = player.volume
+        sleepJob = scope.launch {
+            delay(minutes.coerceIn(1, 180) * 60_000L)
+            val steps = (fadeSeconds.coerceIn(0, 30) * 4).coerceAtLeast(1)
+            val start = player.volume
+            repeat(steps) { step ->
+                player.volume = start * (1f - (step + 1).toFloat() / steps.toFloat())
+                delay(250)
+            }
+            player.pause()
+            player.volume = sleepOriginalVolume
+            sleepJob = null
+        }
     }
 
     private suspend fun restore() {
@@ -422,6 +450,19 @@ class PlaybackService : MediaLibraryService() {
     }
 
     private inner class Callback : MediaLibrarySession.Callback {
+        override fun onCustomCommand(
+            session: MediaSession,
+            controller: MediaSession.ControllerInfo,
+            customCommand: SessionCommand,
+            args: Bundle,
+        ): ListenableFuture<SessionResult> {
+            when (customCommand.customAction) {
+                ACTION_SLEEP_TIMER -> startSleepTimer(args.getInt("minutes", 30), args.getInt("fadeSeconds", 15))
+                ACTION_SLEEP_CANCEL -> cancelSleepTimer()
+            }
+            return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+        }
+
         override fun onAddMediaItems(mediaSession: MediaSession, controller: MediaSession.ControllerInfo, mediaItems: MutableList<MediaItem>): ListenableFuture<MutableList<MediaItem>> =
             Futures.immediateFuture(mediaItems.map { it.playable() }.toMutableList())
 
@@ -486,3 +527,6 @@ private const val RecoveryWindowMs = 60_000L
 internal const val EXTRA_OUTPUT = "aether.output"
 internal const val EXTRA_CARRIED = "aether.carried"
 internal const val EXTRA_BIT_PERFECT = "aether.bitPerfect"
+
+internal const val ACTION_SLEEP_TIMER = "app.astral.music.SLEEP_TIMER"
+internal const val ACTION_SLEEP_CANCEL = "app.astral.music.SLEEP_CANCEL"

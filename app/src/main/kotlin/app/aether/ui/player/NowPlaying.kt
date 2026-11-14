@@ -188,6 +188,7 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
     val treatmentIndex by container.settings.artwork.collectAsStateWithLifecycle()
     val treatment = ArtTreatment.Cycle[treatmentIndex.mod(ArtTreatment.Cycle.size)]
     val queueSheet = rememberDragState()
+    val sleepSheet = rememberDragState()
     val lyricsPane = rememberDragState(give = Pull.Give, flick = Pull.Flick)
     val songVideo by container.settings.songVideo.collectAsStateWithLifecycle()
     val films = remember { mutableStateListOf(FilmSlot(track)) }
@@ -274,6 +275,8 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
                     if (state.queue.size > 1) Txt("${state.index + 1} of ${state.queue.size}", Type.Meta, color = Ink.Grey)
                     Spacer(Modifier.height(6.dp))
                     GlassPill("Astral Canvas", onClick = { canvasMode = true }, small = true)
+                    Spacer(Modifier.height(5.dp))
+                    GlassPill("Sleep timer", onClick = { sleepSheet.show() }, small = true)
                 }
                 Print(
                     track = track,
@@ -353,6 +356,21 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
                 GlassCircle(Glyph.Previous, "Previous", { haptics.strong(); actions.playback.previous() }, Modifier.at(stage.previous), size = stage.key, iconSize = 19.dp, backdrop = null)
                 GlassCircle(Glyph.Next, "Next", { haptics.strong(); actions.playback.next() }, Modifier.at(stage.next), size = stage.key, iconSize = 19.dp, backdrop = null)
                 DragSheet(queueSheet) { QueueSheet(state) }
+                DragSheet(sleepSheet) {
+                    Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp).padding(bottom = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Txt("Sleep timer", Type.TitleSmall)
+                        Spacer(Modifier.height(8.dp))
+                        Txt("Music fades out and stops automatically", Type.Meta, color = Ink.Grey)
+                        Spacer(Modifier.height(18.dp))
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf(15, 30, 45, 60).forEach { minutes ->
+                                Box(Modifier.weight(1f)) { GlassPill("${minutes}m", onClick = { actions.playback.setSleepTimer(minutes); sleepSheet.hide() }, small = true) }
+                            }
+                        }
+                        Spacer(Modifier.height(12.dp))
+                        GlassPill("Cancel timer", onClick = { actions.playback.cancelSleepTimer(); sleepSheet.hide() }, small = true)
+                    }
+                }
                 if (canvasMode) AstralCanvasMode(track, state, canvasPosition, { canvasMode = false }, { actions.playback.previous() }, { actions.playback.toggle() }, { actions.playback.next() })
                 menu?.invoke()
               }
