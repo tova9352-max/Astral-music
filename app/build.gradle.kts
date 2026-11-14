@@ -27,8 +27,8 @@ android {
         minSdk = 29
         targetSdk = 36
         // major * 1,000,000 + minor * 1,000 + patch, so it only ever rises.
-        versionCode = 2_003_002
-        versionName = "2.3.2"
+        versionCode = 2_003_003
+        versionName = "2.3.3"
     }
     signingConfigs {
         if (releaseStore != null) {

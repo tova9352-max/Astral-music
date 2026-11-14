@@ -208,6 +208,8 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
     val scope = rememberCoroutineScope()
     val liked by container.library.isLiked(track.id).collectAsStateWithLifecycle(false)
     val lyrics = rememberLyrics(track)
+    val canvasPosition by container.playback.position.collectAsStateWithLifecycle()
+    var canvasMode by remember { mutableStateOf(false) }
     val insets = WindowInsets.systemBarsIgnoringVisibility.asPaddingValues()
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
@@ -270,6 +272,8 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
                 Column(Modifier.at(stage.heading), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
                     Txt("Now playing", Type.Label, upper = true, modifier = Modifier.padding(top = 18.dp))
                     if (state.queue.size > 1) Txt("${state.index + 1} of ${state.queue.size}", Type.Meta, color = Ink.Grey)
+                    Spacer(Modifier.height(6.dp))
+                    GlassPill("Astral Canvas", onClick = { canvasMode = true }, small = true)
                 }
                 Print(
                     track = track,
@@ -349,6 +353,7 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
                 GlassCircle(Glyph.Previous, "Previous", { haptics.strong(); actions.playback.previous() }, Modifier.at(stage.previous), size = stage.key, iconSize = 19.dp, backdrop = null)
                 GlassCircle(Glyph.Next, "Next", { haptics.strong(); actions.playback.next() }, Modifier.at(stage.next), size = stage.key, iconSize = 19.dp, backdrop = null)
                 DragSheet(queueSheet) { QueueSheet(state) }
+                if (canvasMode) AstralCanvasMode(track, state, canvasPosition, { canvasMode = false }, { actions.playback.previous() }, { actions.playback.toggle() }, { actions.playback.next() })
                 menu?.invoke()
               }
                 // The words, full screen over everything; they follow the finger down to go.
@@ -363,6 +368,63 @@ fun NowPlaying(player: DragState, onClose: () -> Unit, menu: (@Composable () -> 
                 }
             },
         )
+    }
+}
+
+/**
+ * Astral Canvas: an immersive artwork room with a playback-driven light field and transport.
+ * Its bars are ambient animation, not an audio-amplitude visualizer.
+ */
+@Composable
+private fun AstralCanvasMode(
+    track: Track,
+    state: PlaybackState,
+    positionMs: Long,
+    onClose: () -> Unit,
+    onPrevious: () -> Unit,
+    onToggle: () -> Unit,
+    onNext: () -> Unit,
+) {
+    val reduceMotion = LocalReduceMotion.current
+    val transition = rememberInfiniteTransition(label = "astral-canvas")
+    val phase by transition.animateFloat(0f, 1f, infiniteRepeatable(tween(5200, easing = LinearEasing)), label = "canvas-phase")
+    Box(Modifier.fillMaxSize().background(Color.Black)) {
+        SoftArt(track.artwork, Modifier.fillMaxSize().alpha(0.72f), px = 56)
+        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.36f), 0.48f to Color.Black.copy(alpha = 0.16f), 1f to Color.Black.copy(alpha = 0.94f))))
+        TreatedArtwork(track.artwork, ArtTreatment.Original,
+            Modifier.align(Alignment.Center).fillMaxWidth().padding(horizontal = 34.dp).height(390.dp).clip(Corners.Medium),
+            sizeHintPx = 1000, contentDescription = track.title)
+        Canvas(Modifier.fillMaxWidth().height(112.dp).align(Alignment.Center).padding(horizontal = 26.dp)) {
+            val count = 40
+            val progress = if (state.durationMs > 0L) (positionMs.toFloat() / state.durationMs).coerceIn(0f, 1f) else 0f
+            val gap = size.width / (count * 1.65f)
+            val barWidth = gap * 0.65f
+            for (i in 0 until count) {
+                val wave = if (reduceMotion || !state.isPlaying) 0.22f else 0.5f + 0.5f * sin(phase * 2f * PI.toFloat() + i * 0.43f)
+                val envelope = 0.18f + 0.82f * abs(sin(i * 0.19f + progress * PI.toFloat()))
+                val h = size.height * (0.08f + 0.78f * wave * envelope)
+                val x = gap * i + (gap - barWidth) / 2f
+                drawRoundRect(Color(0xFFDDE5F4).copy(alpha = if (i / count.toFloat() <= progress) 0.86f else 0.30f),
+                    Offset(x, (size.height - h) / 2f), Size(barWidth, h),
+                    androidx.compose.ui.geometry.CornerRadius(barWidth / 2f))
+            }
+        }
+        Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(horizontal = 30.dp).padding(bottom = 54.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Txt("ASTRAL CANVAS", Type.Label, color = Ink.Grey, upper = true)
+            Spacer(Modifier.height(12.dp))
+            Txt(track.title, Type.Display, color = Ink.White, maxLines = 2, align = TextAlign.Center)
+            Spacer(Modifier.height(6.dp))
+            Txt(track.artistLine, Type.Body, color = Ink.Grey, maxLines = 1, align = TextAlign.Center)
+            Spacer(Modifier.height(28.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                GlassCircle(Glyph.Previous, "Previous", onPrevious, Modifier.size(54.dp), backdrop = null)
+                Spacer(Modifier.width(28.dp))
+                GlassCircle(if (state.isPlaying) Glyph.Pause else Glyph.Play, if (state.isPlaying) "Pause" else "Play", onToggle, Modifier.size(66.dp), iconSize = 25.dp, backdrop = null)
+                Spacer(Modifier.width(28.dp))
+                GlassCircle(Glyph.Next, "Next", onNext, Modifier.size(54.dp), backdrop = null)
+            }
+        }
+        GlassCircle(Glyph.Close, "Close Canvas", onClose, Modifier.align(Alignment.TopStart).padding(start = 18.dp, top = 28.dp), backdrop = null)
     }
 }
 
