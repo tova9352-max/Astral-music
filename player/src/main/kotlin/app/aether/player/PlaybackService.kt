@@ -528,5 +528,3 @@ internal const val EXTRA_OUTPUT = "aether.output"
 internal const val EXTRA_CARRIED = "aether.carried"
 internal const val EXTRA_BIT_PERFECT = "aether.bitPerfect"
 
-internal const val ACTION_SLEEP_TIMER = "app.astral.music.SLEEP_TIMER"
-internal const val ACTION_SLEEP_CANCEL = "app.astral.music.SLEEP_CANCEL"
